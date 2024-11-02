@@ -95,12 +95,28 @@ public class LoginService {
             // return user
             String code = jsonResponse.get("code").toString();
             if (code.equals("success")) {
+
+                JSONObject userData = new JSONObject(jsonResponse.get("user").toString());
+                JSONObject studentData = new JSONObject(userData.get("student").toString());
+
+                String departmentName = studentData.get("departmentNameTh").toString();
+                String majorName = studentData.get("majorNameTh").toString();
+                String firstNameEn = userData.get("firstNameEn").toString().toLowerCase();
+                String lastNameEn = userData.get("lastNameEn").toString().toLowerCase();
+                //ตัวแรกของชื่อพิมพ์ใหญ้
+                firstNameEn = firstNameEn.substring(0, 1).toUpperCase() + firstNameEn.substring(1);
+                lastNameEn = lastNameEn.substring(0, 1).toUpperCase() + lastNameEn.substring(1);
+
                 User user = repository.findByUsername(username);
                 if (user == null) {
                     user = new User();
                     user.setUsername(username);
                     user.setCreatedAt(LocalDateTime.now());
                     user.setUpdatedAt(user.getCreatedAt());
+                    user.setFirstName(firstNameEn);
+                    user.setLastName(lastNameEn);
+                    user.setDepartmentNameTh(departmentName);
+                    user.setMajorName(majorName);
                     return repository.save(user);
                 }
                 return user;

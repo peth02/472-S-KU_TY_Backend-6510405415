@@ -21,4 +21,12 @@ public class User {
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "department_name_th", nullable = false)
+    private String departmentNameTh;
+    @Column(name = "major_name", nullable = false)
+    private String majorName;
 }
