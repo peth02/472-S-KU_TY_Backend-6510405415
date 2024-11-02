@@ -7,6 +7,7 @@ import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     public List<Event> getAllEvent(){
         List<Event> events = eventRepository.findAll();
         return events;
@@ -51,6 +54,8 @@ public class EventService {
            event.setCreatedAt(LocalDateTime.now());
            event.setUpdatedAt(event.getCreatedAt());
            event = eventRepository.save(event);
+
+           userService.joinEvent(new JoinEventRequest(user.getUserId(), event.getEventId()));
            return event;
        }
        catch (Exception e){
