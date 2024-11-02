@@ -1,6 +1,7 @@
 package a4.KU_TY_backend.KU_TY_backend.entity;
 
 import a4.KU_TY_backend.KU_TY_backend.common.EventStatus;
+import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,4 +36,17 @@ public class Event {
     @OneToMany(mappedBy = "event")
     @JsonIgnore
     private List<EventUser> joinedUserList;
+    public EventResponse toResponse() {
+        EventResponse dto = new EventResponse();
+        dto.setEventId(eventId);
+        dto.setCreatedBy(createdBy.getUserId());
+        dto.setName(name);
+        dto.setDescription(description);
+        dto.setCreatedAt(createdAt);
+        dto.setUpdatedAt(updatedAt);
+        dto.setStatus(status);
+        dto.setStartDate(startDate);
+        dto.setLocation(location);
+        return dto;
+    }
 }

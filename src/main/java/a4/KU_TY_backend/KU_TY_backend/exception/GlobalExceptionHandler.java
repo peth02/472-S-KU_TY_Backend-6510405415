@@ -19,16 +19,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleSystemException(SystemException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null); // ส่งข้อความ error ไปยัง response
     }
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
-        return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
-    }
-    @ExceptionHandler(CreateEventException.class)
-    public ResponseEntity<Object> handleCreateEventException(CreateEventException ex) {
-        return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
-    }
-    @ExceptionHandler(JoinEventException.class)
-    public ResponseEntity<Object> handleJoinEventException(JoinEventException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleNoteFoundException(NotFoundException ex){
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
     }
 }

@@ -2,8 +2,8 @@ package a4.KU_TY_backend.KU_TY_backend.service;
 
 import a4.KU_TY_backend.KU_TY_backend.entity.Event;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
-import a4.KU_TY_backend.KU_TY_backend.exception.CreateEventException;
-import a4.KU_TY_backend.KU_TY_backend.exception.UserNotFoundException;
+import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
+import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
@@ -22,15 +22,20 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private UserRepository userRepository;
-    public List<EventResponse> getAllEvent(){
+    public List<Event> getAllEvent(){
         List<Event> events = eventRepository.findAll();
-        return events.stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+        return events;
     }
-    public EventResponse create(CreateEventRequest request){
+    public Event getEventById(UUID eventId){
+        if(eventId == null){
+            throw new SystemException("userId must not be null");
+        }
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
+        return event;
+    }
+    public Event create(CreateEventRequest request){
        try{
-           User user = userRepository.findById(request.getCreatedBy()).orElseThrow(()-> new UserNotFoundException("User not found"));
+           User user = userRepository.findById(request.getCreatedBy()).orElseThrow(()-> new NotFoundException("User not found"));
            Event event = new Event();
 
            String name = request.getName();
@@ -46,23 +51,10 @@ public class EventService {
            event.setCreatedAt(LocalDateTime.now());
            event.setUpdatedAt(event.getCreatedAt());
            event = eventRepository.save(event);
-           return convertToResponse(event);
+           return event;
        }
        catch (Exception e){
-           throw new CreateEventException(e.getMessage());
+           throw new SystemException(e.getMessage());
        }
-    }
-    private EventResponse convertToResponse(Event event) {
-        EventResponse dto = new EventResponse();
-        dto.setEventId(event.getEventId());
-        dto.setCreatedBy(event.getCreatedBy().getUserId());  // แปลง User เป็น UUID
-        dto.setName(event.getName());
-        dto.setDescription(event.getDescription());
-        dto.setCreatedAt(event.getCreatedAt());
-        dto.setUpdatedAt(event.getUpdatedAt());
-        dto.setStatus(event.getStatus());
-        dto.setStartDate(event.getStartDate());
-        dto.setLocation(event.getLocation());
-        return dto;
     }
 }
