@@ -5,6 +5,7 @@ import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.exception.UserNotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserDescriptionRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,14 @@ public class UserService {
         }
         User user = repository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setDescription(request.getDescription());
+        return repository.save(user);
+    }
+    public User updateEmail(UpdateUserEmailRequest request){
+        if(request.getUserId() == null){
+            throw new SystemException("userId must not be null");
+        }
+        User user = repository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setEmail(request.getEmail());
         return repository.save(user);
     }
 }
