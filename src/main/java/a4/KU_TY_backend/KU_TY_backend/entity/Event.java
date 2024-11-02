@@ -1,6 +1,9 @@
 package a4.KU_TY_backend.KU_TY_backend.entity;
 
 import a4.KU_TY_backend.KU_TY_backend.common.EventStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 

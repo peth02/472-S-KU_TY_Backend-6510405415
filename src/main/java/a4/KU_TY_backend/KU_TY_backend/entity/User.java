@@ -1,5 +1,9 @@
 package a4.KU_TY_backend.KU_TY_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,5 +35,6 @@ public class User {
     @Column(name = "major_name", nullable = false)
     private String majorName;
     @OneToMany(mappedBy = "createdBy")
+    @JsonIgnore
     private List<Event> eventList;
 }
