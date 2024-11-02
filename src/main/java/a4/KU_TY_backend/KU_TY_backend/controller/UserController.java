@@ -47,6 +47,10 @@ public class UserController {
     public ResponseEntity<Object> updateUserName(@RequestBody UpdateUserNameRequest request){
         return ResponseHandler.responseBuilder("Update user name success", HttpStatus.OK, service.updateName(request));
     }
+    @PutMapping("/user")
+    public ResponseEntity<Object> updateUser(@RequestBody User user){
+        return ResponseHandler.responseBuilder("Update user success", HttpStatus.OK, service.updateUser(user));
+    }
     @PostMapping("/user/join/event")
     public ResponseEntity<Object> joinEvent(@RequestBody JoinEventRequest request){
         return ResponseHandler.responseBuilder("Join event success", HttpStatus.OK, service.joinEvent(request));

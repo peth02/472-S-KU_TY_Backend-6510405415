@@ -28,5 +28,4 @@ public class EventController {
         Event event = service.create(request);
         return ResponseHandler.responseBuilder("Create event success", HttpStatus.OK, event);
     }
-
 }

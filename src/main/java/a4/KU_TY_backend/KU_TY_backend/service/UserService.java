@@ -97,4 +97,9 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not found"));
         return user.getJoinedEventList().stream().map(EventUser::getEvent).collect(Collectors.toList());
     }
+    public User updateUser(User user){
+        if(user == null) throw new SystemException("userId must not be null");
+        userRepository.findById(user.getUserId()).orElseThrow(()-> new NotFoundException("User not found"));
+        return userRepository.save(user);
+    }
 }
