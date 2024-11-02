@@ -7,12 +7,10 @@ import a4.KU_TY_backend.KU_TY_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -20,10 +18,14 @@ public class UserController {
     private UserService service;
     @GetMapping("/user")
     public ResponseEntity<Object> getAllUser(){
-        return ResponseHandler.responseBuilder("Get all user successful", HttpStatus.OK, service.getAllUser());
+        return ResponseHandler.responseBuilder("Get all user success", HttpStatus.OK, service.getAllUser());
+    }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Object> getUserById(@PathVariable("userId") UUID userId){
+        return ResponseHandler.responseBuilder("Get user success", HttpStatus.OK, service.getUserById(userId));
     }
     @PutMapping("/user/update/description")
     public ResponseEntity<Object> updateUserDescription(@RequestBody UpdateUserDescriptionRequest request){
-        return ResponseHandler.responseBuilder("update user description successful", HttpStatus.OK, service.updateDescription(request));
+        return ResponseHandler.responseBuilder("Update user description success", HttpStatus.OK, service.updateDescription(request));
     }
 }

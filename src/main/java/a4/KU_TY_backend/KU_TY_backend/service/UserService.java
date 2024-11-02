@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -17,6 +18,13 @@ public class UserService {
 
     public List<User> getAllUser(){
         return repository.findAll();
+    }
+    public User getUserById(UUID userId){
+        if(userId == null){
+            throw new SystemException("userId must not be null");
+        }
+        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return user;
     }
     public User updateDescription(UpdateUserDescriptionRequest request){
         if(request.getUserId() == null){
