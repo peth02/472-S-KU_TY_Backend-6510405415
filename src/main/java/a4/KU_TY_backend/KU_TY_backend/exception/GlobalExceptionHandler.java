@@ -21,4 +21,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
     }
+    @ExceptionHandler(CreateEventException.class)
+    public ResponseEntity<Object> handleCreateEventException(CreateEventException ex) {
+        return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
+    }
 }

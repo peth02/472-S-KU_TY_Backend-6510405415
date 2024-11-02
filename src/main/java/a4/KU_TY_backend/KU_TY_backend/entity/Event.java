@@ -13,7 +13,7 @@ public class Event {
     @GeneratedValue
     private UUID eventId;
     @ManyToOne
-    @Column(name = "created_by", nullable = false)
+    @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
     @Column(nullable = false)
     private String name;
@@ -22,6 +22,7 @@ public class Event {
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+    @Enumerated(EnumType.STRING)
     private EventStatus status = EventStatus.CLOSED;
     @Column(name = "start_date")
     private LocalDateTime startDate;
