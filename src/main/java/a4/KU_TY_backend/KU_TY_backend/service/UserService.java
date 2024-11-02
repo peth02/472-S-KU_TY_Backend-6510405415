@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -91,5 +92,9 @@ public class UserService {
         eventUserRepository.save(eventUser);
 
         return event;
+    }
+    public List<Event> getAllJoinedEvent(UUID userId){
+        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not found"));
+        return user.getJoinedEventList().stream().map(EventUser::getEvent).collect(Collectors.toList());
     }
 }

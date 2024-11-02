@@ -31,7 +31,10 @@ public class UserController {
     public ResponseEntity<Object> getUserById(@PathVariable("username") String username){
         return ResponseHandler.responseBuilder("Get user success", HttpStatus.OK, service.getUserByUsername(username));
     }
-
+    @GetMapping("/user/userId/{userId}/joined/event")
+    public ResponseEntity<Object> getAllJoinedEvent(@PathVariable UUID userId){
+        return ResponseHandler.responseBuilder("Get joined event success", HttpStatus.OK, service.getAllJoinedEvent(userId));
+    }
     @PutMapping("/user/update/description")
     public ResponseEntity<Object> updateUserDescription(@RequestBody UpdateUserDescriptionRequest request){
         return ResponseHandler.responseBuilder("Update user description success", HttpStatus.OK, service.updateDescription(request));

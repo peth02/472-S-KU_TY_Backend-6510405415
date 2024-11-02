@@ -8,14 +8,12 @@ import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class EventService {
