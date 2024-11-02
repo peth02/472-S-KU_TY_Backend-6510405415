@@ -1,6 +1,7 @@
 package a4.KU_TY_backend.KU_TY_backend.service;
 
 import a4.KU_TY_backend.KU_TY_backend.entity.Event;
+import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
 import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -29,7 +31,7 @@ public class EventService {
     }
     public Event getEventById(UUID eventId){
         if(eventId == null){
-            throw new SystemException("userId must not be null");
+            throw new SystemException("eventId must not be null");
         }
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
         return event;
@@ -59,5 +61,9 @@ public class EventService {
        catch (Exception e){
            throw new SystemException(e.getMessage());
        }
+    }
+    public List<User> getAllJoinedUser(UUID eventId){
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
+        return event.getJoinedUserList().stream().map(EventUser::getUser).collect(Collectors.toList());
     }
 }

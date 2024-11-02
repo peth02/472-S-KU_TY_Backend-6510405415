@@ -23,9 +23,14 @@ public class EventController {
     public ResponseEntity<Object> getEventById(@PathVariable("eventId") UUID eventId){
         return ResponseHandler.responseBuilder("Get event success", HttpStatus.OK, service.getEventById(eventId));
     }
+    @GetMapping("/event/{eventId}/joined/user")
+    public ResponseEntity<Object> getAllJoinedUser(@PathVariable("eventId") UUID eventId){
+        return ResponseHandler.responseBuilder("Get joined user success", HttpStatus.OK, service.getAllJoinedUser(eventId));
+    }
     @PostMapping("/event")
     public ResponseEntity<Object> create(@RequestBody CreateEventRequest request){
         Event event = service.create(request);
         return ResponseHandler.responseBuilder("Create event success", HttpStatus.OK, event);
     }
+
 }

@@ -1,8 +1,5 @@
 package a4.KU_TY_backend.KU_TY_backend.exception;
-
-import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
-import org.hibernate.mapping.Join;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
