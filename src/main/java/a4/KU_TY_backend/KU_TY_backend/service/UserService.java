@@ -4,6 +4,7 @@ import a4.KU_TY_backend.KU_TY_backend.entity.Event;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventUserKey;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
+import a4.KU_TY_backend.KU_TY_backend.exception.JoinedEventException;
 import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
@@ -80,6 +81,7 @@ public class UserService {
         User user =  userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
 
         EventUserKey eventUserKey = new EventUserKey(eventId, userId);
+        if(eventUserRepository.findById(eventUserKey).isPresent()) throw new JoinedEventException("User has already joined this event");
 
         EventUser eventUser = new EventUser();
         eventUser.setKey(eventUserKey);

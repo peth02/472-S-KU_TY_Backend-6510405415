@@ -23,4 +23,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleNoteFoundException(NotFoundException ex){
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
     }
+    @ExceptionHandler(JoinedEventException.class)
+    public ResponseEntity<Object> handleJoinedEventException(JoinedEventException ex){
+        return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.CONFLICT, null); // ส่งข้อความ error ไปยัง response
+    }
 }
