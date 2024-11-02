@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.DataOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -98,6 +99,8 @@ public class LoginService {
                 if (user == null) {
                     user = new User();
                     user.setUsername(username);
+                    user.setCreatedAt(LocalDateTime.now());
+                    user.setUpdatedAt(user.getCreatedAt());
                     return repository.save(user);
                 }
                 return user;

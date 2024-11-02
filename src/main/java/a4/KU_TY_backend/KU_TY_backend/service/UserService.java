@@ -9,6 +9,7 @@ import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class UserService {
         }
         User user = repository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setDescription(request.getDescription());
+        user.setUpdatedAt(LocalDateTime.now());
         return repository.save(user);
     }
     public User updateEmail(UpdateUserEmailRequest request){

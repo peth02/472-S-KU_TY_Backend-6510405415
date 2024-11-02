@@ -19,8 +19,6 @@ public class User {
     private String email;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 }
