@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,4 +30,6 @@ public class User {
     private String departmentNameTh;
     @Column(name = "major_name", nullable = false)
     private String majorName;
+    @OneToMany(mappedBy = "createdBy")
+    private List<Event> eventList;
 }
