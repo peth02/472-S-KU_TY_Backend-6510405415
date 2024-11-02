@@ -1,6 +1,8 @@
 package a4.KU_TY_backend.KU_TY_backend.service;
 
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
+import a4.KU_TY_backend.KU_TY_backend.exception.LoginException;
+import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.LoginRequest;
 import a4.KU_TY_backend.KU_TY_backend.util.Encryption;
@@ -100,10 +102,10 @@ public class LoginService {
                 }
                 return user;
             }
-            return null;
+            throw new LoginException("Invalid Username and Password");
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new SystemException(e.getMessage());
         }
     }
 }
