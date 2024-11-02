@@ -16,12 +16,18 @@ import java.io.DataOutputStream;
 import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
 @Service
 public class LoginService {
     @Autowired
     private UserRepository repository;
     public User login(LoginRequest loginRequest){
         try {
+            // ใช้ username ที่ยังไม่ encrypt เพื่อค้นหาและเพิ่ม User
+            String username = loginRequest.getUsername();
+
+            //username password encrypt เพื่อ login
             loginRequest.setPassword(Encryption.encrypt(loginRequest.getPassword()));
             loginRequest.setUsername(Encryption.encrypt(loginRequest.getUsername()));
             String appKey = "txCR5732xYYWDGdd49M3R19o1OVwdRFc";
@@ -74,15 +80,28 @@ public class LoginService {
             }
             reader.close();
 
-            // พิมพ์ผลลัพธ์
-            System.out.println("Response: " + response.toString());
-
             // ปิดการเชื่อมต่อ
             connection.disconnect();
 
-            return new User();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            // พิมพ์ผลลัพธ์
+            System.out.println("Response: " + response.toString());
+
+            // แปลง response เป็น JSON
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            // return user
+            String code = jsonResponse.get("code").toString();
+            if (code.equals("success")) {
+                User user = repository.findByUsername(username);
+                if (user == null) {
+                    user = new User();
+                    user.setUsername(username);
+                    return repository.save(user);
+                }
+                return user;
+            }
+            return null;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
