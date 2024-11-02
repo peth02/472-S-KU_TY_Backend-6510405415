@@ -1,9 +1,16 @@
 package a4.KU_TY_backend.KU_TY_backend.service;
 
+import a4.KU_TY_backend.KU_TY_backend.entity.Event;
+import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
+import a4.KU_TY_backend.KU_TY_backend.entity.EventUserKey;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
+import a4.KU_TY_backend.KU_TY_backend.exception.JoinEventException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.exception.UserNotFoundException;
+import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
+import a4.KU_TY_backend.KU_TY_backend.repository.EventUserRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
+import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserDescriptionRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserNameRequest;
@@ -17,21 +24,25 @@ import java.util.UUID;
 @Service
 public class UserService {
     @Autowired
-    UserRepository repository;
+    UserRepository userRepository;
+    @Autowired
+    EventRepository eventRepository;
+    @Autowired
+    EventUserRepository eventUserRepository;
 
     public List<User> getAllUser(){
-        return repository.findAll();
+        return userRepository.findAll();
     }
     public User getUserById(UUID userId){
         if(userId == null){
             throw new SystemException("userId must not be null");
         }
-        User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         return user;
     }
     public User getUserByUsername(String username){
         if(username == null) throw new SystemException("username must not be null");
-        User user = repository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if(user == null) throw new UserNotFoundException("User not found");
         return user;
     }
@@ -39,26 +50,45 @@ public class UserService {
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");
         }
-        User user = repository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setDescription(request.getDescription());
         user.setUpdatedAt(LocalDateTime.now());
-        return repository.save(user);
+        return userRepository.save(user);
     }
     public User updateEmail(UpdateUserEmailRequest request){
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");
         }
-        User user = repository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setEmail(request.getEmail());
-        return repository.save(user);
+        return userRepository.save(user);
     }
     public User updateName(UpdateUserNameRequest request){
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");
         }
-        User user = repository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        return repository.save(user);
+        return userRepository.save(user);
+    }
+    public Event joinEvent(JoinEventRequest request){
+        UUID eventId = request.getEventId();
+        UUID userId = request.getUserId();
+
+        if(eventId == null || userId == null) throw new JoinEventException("User id and event id must not be null");
+        Event event =  eventRepository.findById(eventId).orElseThrow(()-> new JoinEventException("Event not found"));
+        User user =  userRepository.findById(userId).orElseThrow(()-> new JoinEventException("User not found"));
+
+        EventUserKey eventUserKey = new EventUserKey(eventId, userId);
+
+        EventUser eventUser = new EventUser();
+        eventUser.setKey(eventUserKey);
+        eventUser.setEvent(event);
+        eventUser.setUser(user);
+
+        eventUserRepository.save(eventUser);
+
+        return event;
     }
 }

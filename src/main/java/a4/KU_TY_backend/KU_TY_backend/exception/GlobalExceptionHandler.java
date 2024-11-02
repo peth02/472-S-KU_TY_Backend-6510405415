@@ -1,6 +1,8 @@
 package a4.KU_TY_backend.KU_TY_backend.exception;
 
+import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
+import org.hibernate.mapping.Join;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +25,10 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(CreateEventException.class)
     public ResponseEntity<Object> handleCreateEventException(CreateEventException ex) {
+        return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
+    }
+    @ExceptionHandler(JoinEventException.class)
+    public ResponseEntity<Object> handleJoinEventException(JoinEventException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
     }
 }

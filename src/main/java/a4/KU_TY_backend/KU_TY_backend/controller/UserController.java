@@ -1,6 +1,7 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
 
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
+import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserDescriptionRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserNameRequest;
@@ -42,5 +43,9 @@ public class UserController {
     @PutMapping("/user/update/name")
     public ResponseEntity<Object> updateUserName(@RequestBody UpdateUserNameRequest request){
         return ResponseHandler.responseBuilder("Update user name success", HttpStatus.OK, service.updateName(request));
+    }
+    @PostMapping("/user/join/event")
+    public ResponseEntity<Object> joinEvent(@RequestBody JoinEventRequest request){
+        return ResponseHandler.responseBuilder("Join event success", HttpStatus.OK, service.joinEvent(request));
     }
 }

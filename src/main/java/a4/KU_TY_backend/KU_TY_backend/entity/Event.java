@@ -3,11 +3,13 @@ package a4.KU_TY_backend.KU_TY_backend.entity;
 import a4.KU_TY_backend.KU_TY_backend.common.EventStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 @Entity
 @Data
@@ -30,4 +32,7 @@ public class Event {
     @Column(name = "start_date")
     private LocalDateTime startDate;
     private String location;
+    @OneToMany(mappedBy = "event")
+    @JsonIgnore
+    private List<EventUser> joinedUserList;
 }
