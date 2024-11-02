@@ -1,7 +1,6 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
 import a4.KU_TY_backend.KU_TY_backend.entity.Event;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
