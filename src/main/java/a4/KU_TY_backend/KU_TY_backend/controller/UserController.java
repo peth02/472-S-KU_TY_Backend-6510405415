@@ -3,6 +3,7 @@ package a4.KU_TY_backend.KU_TY_backend.controller;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserDescriptionRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserNameRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,9 @@ public class UserController {
     @PutMapping("/user/update/email")
     public ResponseEntity<Object> updateUserEmail(@RequestBody UpdateUserEmailRequest request){
         return ResponseHandler.responseBuilder("Update user email success", HttpStatus.OK, service.updateEmail(request));
+    }
+    @PutMapping("/user/update/name")
+    public ResponseEntity<Object> updateUserName(@RequestBody UpdateUserNameRequest request){
+        return ResponseHandler.responseBuilder("Update user name success", HttpStatus.OK, service.updateName(request));
     }
 }
