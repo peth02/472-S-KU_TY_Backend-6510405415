@@ -84,6 +84,8 @@ public class UserService {
         EventUserKey eventUserKey = new EventUserKey(eventId, userId);
         if(eventUserRepository.findById(eventUserKey).isPresent()) throw new JoinedEventException("User has already joined this event");
 
+        event.setAttendeeCount(event.getAttendeeCount() + 1);
+
         EventUser eventUser = new EventUser();
         eventUser.setKey(eventUserKey);
         eventUser.setEvent(event);

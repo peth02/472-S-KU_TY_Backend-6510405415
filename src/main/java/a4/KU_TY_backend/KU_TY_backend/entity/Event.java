@@ -4,6 +4,7 @@ import a4.KU_TY_backend.KU_TY_backend.common.EventStatus;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,13 @@ public class Event {
     @OneToMany(mappedBy = "event")
     @JsonIgnore
     private List<EventUser> joinedUserList;
+    @Min(1)
+    @Column(nullable = false)
+    private int capacity = 1;
+    @Column(name = "attendee_count", nullable = false)
+    @Min(0)
+    private int attendeeCount = 0;
+    private String imageUrl;
     public EventResponse toResponse() {
         EventResponse dto = new EventResponse();
         dto.setEventId(eventId);
@@ -44,6 +52,9 @@ public class Event {
         dto.setStatus(status);
         dto.setStartDate(startDate);
         dto.setLocation(location);
+        dto.setCapacity(capacity);
+        dto.setAttendeeCount(attendeeCount);
+        dto.setImageUrl(imageUrl);
         return dto;
     }
 }

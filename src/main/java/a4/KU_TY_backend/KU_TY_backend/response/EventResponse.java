@@ -16,4 +16,7 @@ public class EventResponse {
     private EventStatus status;
     private LocalDateTime startDate;
     private String location;
+    private int capacity;
+    private int attendeeCount;
+    private String imageUrl;
 }

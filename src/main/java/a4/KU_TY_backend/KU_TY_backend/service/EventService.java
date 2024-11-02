@@ -9,6 +9,8 @@ import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +47,17 @@ public class EventService {
            String description = request.getDescription();
            String location = request.getLocation();
            LocalDateTime startDate = request.getStartDate();
+           int capacity = request.getCapacity();
+           String imageUrl = request.getImageUrl();
+
 
            event.setCreatedBy(user);
            event.setName(name);
            event.setDescription(description);
            event.setLocation(location);
            event.setStartDate(startDate);
+           event.setCapacity(capacity);
+           event.setImageUrl(imageUrl);
            event.setCreatedAt(LocalDateTime.now());
            event.setUpdatedAt(event.getCreatedAt());
            event = eventRepository.save(event);
