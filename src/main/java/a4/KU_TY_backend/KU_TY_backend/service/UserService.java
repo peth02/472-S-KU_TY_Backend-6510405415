@@ -26,6 +26,12 @@ public class UserService {
         User user = repository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         return user;
     }
+    public User getUserByUsername(String username){
+        if(username == null) throw new SystemException("username must not be null");
+        User user = repository.findByUsername(username);
+        if(user == null) throw new UserNotFoundException("User not found");
+        return user;
+    }
     public User updateDescription(UpdateUserDescriptionRequest request){
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");

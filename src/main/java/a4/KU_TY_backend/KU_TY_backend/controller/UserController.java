@@ -20,10 +20,15 @@ public class UserController {
     public ResponseEntity<Object> getAllUser(){
         return ResponseHandler.responseBuilder("Get all user success", HttpStatus.OK, service.getAllUser());
     }
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/userId/{userId}")
     public ResponseEntity<Object> getUserById(@PathVariable("userId") UUID userId){
         return ResponseHandler.responseBuilder("Get user success", HttpStatus.OK, service.getUserById(userId));
     }
+    @GetMapping("/user/username/{username}")
+    public ResponseEntity<Object> getUserById(@PathVariable("username") String username){
+        return ResponseHandler.responseBuilder("Get user success", HttpStatus.OK, service.getUserByUsername(username));
+    }
+
     @PutMapping("/user/update/description")
     public ResponseEntity<Object> updateUserDescription(@RequestBody UpdateUserDescriptionRequest request){
         return ResponseHandler.responseBuilder("Update user description success", HttpStatus.OK, service.updateDescription(request));
