@@ -1,6 +1,6 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
-import a4.KU_TY_backend.KU_TY_backend.entity.Event;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,10 @@ public class EventController {
     @GetMapping("/event/{eventId}/joined/user")
     public ResponseEntity<Object> getAllJoinedUser(@PathVariable("eventId") UUID eventId){
         return ResponseHandler.responseBuilder("Get joined user success", HttpStatus.OK, service.getAllJoinedUser(eventId));
+    }
+    @PutMapping("/event")
+    public ResponseEntity<Object> editEvent(@RequestBody EditEventRequest request){
+        return ResponseHandler.responseBuilder("Edit event success", HttpStatus.OK, service.updateEvent(request));
     }
     @PostMapping("/event")
     public ResponseEntity<Object> create(@RequestBody CreateEventRequest request){

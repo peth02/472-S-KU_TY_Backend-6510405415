@@ -1,21 +1,27 @@
 package a4.KU_TY_backend.KU_TY_backend.service;
 
 import a4.KU_TY_backend.KU_TY_backend.entity.Event;
+import a4.KU_TY_backend.KU_TY_backend.entity.EventType;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
 import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
+import a4.KU_TY_backend.KU_TY_backend.repository.EventTypeRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,6 +34,8 @@ public class EventService {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventTypeRepository eventTypeRepository;
     public List<EventResponse> getAllEvent(){
         List<Event> eventList = eventRepository.findAll();
         return eventList.stream().map(Event::toResponse).collect(Collectors.toList());
@@ -47,7 +55,9 @@ public class EventService {
            String name = request.getName();
            String description = request.getDescription();
            String location = request.getLocation();
-           LocalDateTime startDate = request.getStartDate();
+           LocalDate startDate = request.getStartDate();
+           LocalTime startTime = request.getStartTime();
+
            int capacity = request.getCapacity();
            String imageUrl = request.getImageUrl();
 
@@ -56,7 +66,9 @@ public class EventService {
            event.setName(name);
            event.setDescription(description);
            event.setLocation(location);
-           event.setStartDate(startDate);
+           if(request.getStartDate() == null && request.getStartTime() == null) event.setStartDate(null);
+           else if(request.getStartDate() == null || request.getStartTime() == null) throw new SystemException("If want start date and time ะน null set both null");
+           else event.setStartDate(LocalDateTime.of(request.getStartDate(), request.getStartTime()));
            event.setCapacity(capacity);
            event.setImageUrl(imageUrl);
            event.setCreatedAt(LocalDateTime.now());
@@ -74,5 +86,25 @@ public class EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
         List<User> userList = event.getJoinedUserList().stream().map(EventUser::getUser).collect(Collectors.toList());
         return userList.stream().map(User::toResponse).collect(Collectors.toList());
+    }
+    public EventResponse updateEvent(EditEventRequest request){
+        if(request == null) throw  new SystemException("Request must not be null");
+        UUID eventId = request.getEventId();
+        if(eventId == null) throw new SystemException("User id must not be null");
+        Event event = eventRepository.findById(eventId).orElseThrow(()-> new NotFoundException("Event not found"));
+        if(request.getCapacity() < event.getAttendeeCount()) throw new SystemException("Capacity must greater or equal attendee count");
+        EventType eventType = eventTypeRepository.findByTypeName(request.getTypeName());
+        if(eventType == null) throw new NotFoundException("Type not found");
+        event.setCapacity(request.getCapacity());
+        event.setName(request.getName());
+        event.setDescription(request.getDescription());
+        event.setLocation(request.getLocation());
+        event.setEventType(eventType);
+        event.setImageUrl(request.getImageUrl());
+        if(request.getStartDate() == null && request.getStartTime() == null) event.setStartDate(null);
+        else if(request.getStartDate() == null || request.getStartTime() == null) throw new SystemException("If want start date and time ะน null set both null");
+        else event.setStartDate(LocalDateTime.of(request.getStartDate(), request.getStartTime()));
+        event.setStatus(request.getStatus());
+        return eventRepository.save(event).toResponse();
     }
 }
