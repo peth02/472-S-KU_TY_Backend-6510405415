@@ -41,6 +41,9 @@ public class Event {
     @Min(0)
     private int attendeeCount = 0;
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private EventType typeId;
     public EventResponse toResponse() {
         EventResponse dto = new EventResponse();
         dto.setEventId(eventId);

@@ -12,16 +12,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleLoginException(LoginException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.UNAUTHORIZED, null); // ส่งข้อความ error ไปยัง response
     }
+
     @ExceptionHandler(SystemException.class)
     public ResponseEntity<Object> handleSystemException(SystemException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null); // ส่งข้อความ error ไปยัง response
     }
+
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleNoteFoundException(NotFoundException ex){
+    public ResponseEntity<Object> handleNoteFoundException(NotFoundException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.NOT_FOUND, null); // ส่งข้อความ error ไปยัง response
     }
-    @ExceptionHandler(JoinedEventException.class)
-    public ResponseEntity<Object> handleJoinedEventException(JoinedEventException ex){
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Object> handleConflictException(ConflictException ex) {
         return ResponseHandler.responseBuilder(ex.getMessage(), HttpStatus.CONFLICT, null); // ส่งข้อความ error ไปยัง response
     }
 }
