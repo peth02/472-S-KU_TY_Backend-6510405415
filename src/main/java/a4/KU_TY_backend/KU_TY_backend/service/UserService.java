@@ -13,6 +13,7 @@ import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.*;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
+import a4.KU_TY_backend.KU_TY_backend.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
     @Autowired
-    EventUserRepository eventUserRepository;
+    private EventUserRepository eventUserRepository;
+    @Autowired
+    private Validator validator;
     public List<UserResponse> getAllUser(){
         return userRepository.findAll().stream().map(User::toResponse).collect(Collectors.toList());
     }
@@ -98,7 +101,6 @@ public class UserService {
         return user.getJoinedEventList().stream().map(EventUser::getEvent).map(Event::toResponse).collect(Collectors.toList());
     }
     public UserResponse updateUser(UpdateUserRequest request){
-        if(request == null) throw  new SystemException("Request must not be null");
         UUID userId = request.getUserId();
         if(userId == null) throw new SystemException("User id must not be null");
         User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
@@ -114,17 +116,16 @@ public class UserService {
         if(user == null) throw new NotFoundException("User not found");
         return user.getCreatedEventList().stream().map(Event::toResponse).collect(Collectors.toList());
     }
-    public void quitEvent(quitEventRequest request){
-        if(request == null) throw  new SystemException("Request must not be null");
+    public void quitEvent(QuitEventRequest request){
         UUID userId = request.getUserId();
-        if(userId == null) throw new SystemException("User id must not be null");
         UUID eventId = request.getEventId();
-        if(eventId == null) throw new SystemException("Event id must not be null");
-        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not found"));
-        Event event = eventRepository.findById(eventId).orElseThrow(()-> new NotFoundException("Event not found"));
+        validator.userIdValidate(userId);
+        validator.eventIdValidate(eventId);
+        Event event = eventRepository.findById(eventId).get();
         EventUser eventUser = eventUserRepository.findById(new EventUserKey(eventId, userId)).orElseThrow(()-> new NotFoundException("User not in event"));
         eventUserRepository.delete(eventUser);
         event.setAttendeeCount(event.getAttendeeCount() - 1);
         eventRepository.save(event);
     }
+
 }

@@ -11,13 +11,14 @@ import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventTypeRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.EditEventImageRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 
+import a4.KU_TY_backend.KU_TY_backend.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,6 +38,8 @@ public class EventService {
     private UserService userService;
     @Autowired
     private EventTypeRepository eventTypeRepository;
+    @Autowired
+    private Validator validator;
     public List<EventResponse> getAllEvent(){
         List<Event> eventList = eventRepository.getByStatus(EventStatus.OPEN);
         return eventList.stream().map(Event::toResponse).collect(Collectors.toList());
@@ -112,5 +115,12 @@ public class EventService {
         if(eventId == null) throw new SystemException("Event id must not be null");
         Event event = eventRepository.findById(eventId).orElseThrow(()->new NotFoundException("Event not found"));
         eventRepository.delete(event);
+    }
+    public EventResponse updateImageUrl(EditEventImageRequest request){
+        UUID eventId = request.getEventId();
+        validator.eventIdValidate(eventId);
+        Event event = eventRepository.findById(eventId).get();
+        event.setImageUrl(request.getImageUrl());
+        return eventRepository.save(event).toResponse();
     }
 }

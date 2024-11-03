@@ -51,7 +51,7 @@ public class UserController {
         return ResponseHandler.responseBuilder("Update user success", HttpStatus.OK, service.updateUser(request));
     }
     @DeleteMapping("/user/quit/event")
-    public ResponseEntity<Object> quitEvent(@RequestBody quitEventRequest request){
+    public ResponseEntity<Object> quitEvent(@RequestBody QuitEventRequest request){
         service.quitEvent(request);
         return ResponseHandler.responseBuilder("Quit event success", HttpStatus.OK,null);
     }

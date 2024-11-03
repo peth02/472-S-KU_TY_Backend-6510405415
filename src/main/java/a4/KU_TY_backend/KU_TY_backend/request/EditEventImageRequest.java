@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class quitEventRequest {
-    private UUID userId;
+public class EditEventImageRequest {
     private UUID eventId;
+    private String imageUrl;
 }

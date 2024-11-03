@@ -1,5 +1,6 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.EditEventImageRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.EventService;
@@ -29,6 +30,10 @@ public class EventController {
     @PutMapping("/event")
     public ResponseEntity<Object> editEvent(@RequestBody EditEventRequest request){
         return ResponseHandler.responseBuilder("Edit event success", HttpStatus.OK, service.updateEvent(request));
+    }
+    @PutMapping("/event/photo")
+    public ResponseEntity<Object> editImageUrl(@RequestBody EditEventImageRequest request){
+        return ResponseHandler.responseBuilder("Edit event image success", HttpStatus.OK, service.updateImageUrl(request));
     }
     @PostMapping("/event")
     public ResponseEntity<Object> create(@RequestBody CreateEventRequest request){
