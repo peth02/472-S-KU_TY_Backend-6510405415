@@ -107,5 +107,9 @@ public class EventService {
         event.setStatus(request.getStatus());
         return eventRepository.save(event).toResponse();
     }
-
+    public void deleteEvent(UUID eventId){
+        if(eventId == null) throw new SystemException("Event id must not be null");
+        Event event = eventRepository.findById(eventId).orElseThrow(()->new NotFoundException("Event not found"));
+        eventRepository.delete(event);
+    }
 }

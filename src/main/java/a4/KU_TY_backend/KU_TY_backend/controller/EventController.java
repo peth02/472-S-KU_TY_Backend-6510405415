@@ -34,5 +34,9 @@ public class EventController {
     public ResponseEntity<Object> create(@RequestBody CreateEventRequest request){
         return ResponseHandler.responseBuilder("Create event success", HttpStatus.OK, service.create(request));
     }
-
+    @DeleteMapping("/event/{eventId}")
+    public ResponseEntity<Object> deleteEvent(@PathVariable UUID eventId){
+        service.deleteEvent(eventId);
+        return ResponseHandler.responseBuilder("Delete event success", HttpStatus.OK, null);
+    }
 }

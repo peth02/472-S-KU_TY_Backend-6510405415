@@ -114,4 +114,17 @@ public class UserService {
         if(user == null) throw new NotFoundException("User not found");
         return user.getCreatedEventList().stream().map(Event::toResponse).collect(Collectors.toList());
     }
+    public void quitEvent(quitEventRequest request){
+        if(request == null) throw  new SystemException("Request must not be null");
+        UUID userId = request.getUserId();
+        if(userId == null) throw new SystemException("User id must not be null");
+        UUID eventId = request.getEventId();
+        if(eventId == null) throw new SystemException("Event id must not be null");
+        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not found"));
+        Event event = eventRepository.findById(eventId).orElseThrow(()-> new NotFoundException("Event not found"));
+        EventUser eventUser = eventUserRepository.findById(new EventUserKey(eventId, userId)).orElseThrow(()-> new NotFoundException("User not in event"));
+        eventUserRepository.delete(eventUser);
+        event.setAttendeeCount(event.getAttendeeCount() - 1);
+        eventRepository.save(event);
+    }
 }

@@ -1,6 +1,5 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
 
-import a4.KU_TY_backend.KU_TY_backend.entity.User;
 import a4.KU_TY_backend.KU_TY_backend.request.*;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.UserService;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -51,6 +49,11 @@ public class UserController {
     @PutMapping("/user")
     public ResponseEntity<Object> updateUser(@RequestBody UpdateUserRequest request){
         return ResponseHandler.responseBuilder("Update user success", HttpStatus.OK, service.updateUser(request));
+    }
+    @DeleteMapping("/user/quit/event")
+    public ResponseEntity<Object> quitEvent(@RequestBody quitEventRequest request){
+        service.quitEvent(request);
+        return ResponseHandler.responseBuilder("Quit event success", HttpStatus.OK,null);
     }
     @PostMapping("/user/join/event")
     public ResponseEntity<Object> joinEvent(@RequestBody JoinEventRequest request){
