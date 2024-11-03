@@ -32,6 +32,10 @@ public class UserController {
     public ResponseEntity<Object> getAllJoinedEvent(@PathVariable UUID userId){
         return ResponseHandler.responseBuilder("Get joined event success", HttpStatus.OK, service.getAllJoinedEvent(userId));
     }
+    @GetMapping("/user/userId/{userId}/created/event")
+    public ResponseEntity<Object> getAllCreatedEvent(@PathVariable UUID userId){
+        return ResponseHandler.responseBuilder("Get created event success", HttpStatus.OK, service.getAllCreatedEvent(userId));
+    }
     @PutMapping("/user/update/description")
     public ResponseEntity<Object> updateUserDescription(@RequestBody UpdateUserDescriptionRequest request){
         return ResponseHandler.responseBuilder("Update user description success", HttpStatus.OK, service.updateDescription(request));

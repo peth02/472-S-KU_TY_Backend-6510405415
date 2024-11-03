@@ -29,7 +29,6 @@ public class UserService {
     EventRepository eventRepository;
     @Autowired
     EventUserRepository eventUserRepository;
-
     public List<UserResponse> getAllUser(){
         return userRepository.findAll().stream().map(User::toResponse).collect(Collectors.toList());
     }
@@ -108,5 +107,11 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setDescription(request.getDescription());
         return userRepository.save(user).toResponse();
+    }
+    public List<EventResponse> getAllCreatedEvent(UUID userId){
+        if(userId == null) throw new SystemException("user Id must not be null");
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        if(user == null) throw new NotFoundException("User not found");
+        return user.getCreatedEventList().stream().map(Event::toResponse).collect(Collectors.toList());
     }
 }

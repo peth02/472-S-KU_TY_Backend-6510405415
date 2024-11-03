@@ -66,9 +66,9 @@ public class EventService {
            event.setName(name);
            event.setDescription(description);
            event.setLocation(location);
-           if(request.getStartDate() == null && request.getStartTime() == null) event.setStartDate(null);
-           else if(request.getStartDate() == null || request.getStartTime() == null) throw new SystemException("If want start date and time ะน null set both null");
-           else event.setStartDate(LocalDateTime.of(request.getStartDate(), request.getStartTime()));
+           if(startDate == null && startTime == null) event.setStartDate(null);
+           else if(startDate == null || startTime == null) throw new SystemException("If want start date and time ะน null set both null");
+           else event.setStartDate(LocalDateTime.of(startDate, startTime));
            event.setCapacity(capacity);
            event.setImageUrl(imageUrl);
            event.setCreatedAt(LocalDateTime.now());
@@ -107,4 +107,5 @@ public class EventService {
         event.setStatus(request.getStatus());
         return eventRepository.save(event).toResponse();
     }
+
 }
