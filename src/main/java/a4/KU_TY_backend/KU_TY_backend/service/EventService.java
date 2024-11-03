@@ -9,7 +9,8 @@ import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
+import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
+import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,18 +28,18 @@ public class EventService {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
-    public List<Event> getAllEvent(){
-        List<Event> events = eventRepository.findAll();
-        return events;
+    public List<EventResponse> getAllEvent(){
+        List<Event> eventList = eventRepository.findAll();
+        return eventList.stream().map(Event::toResponse).collect(Collectors.toList());
     }
-    public Event getEventById(UUID eventId){
+    public EventResponse getEventById(UUID eventId){
         if(eventId == null){
             throw new SystemException("eventId must not be null");
         }
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
-        return event;
+        return event.toResponse();
     }
-    public Event create(CreateEventRequest request){
+    public EventResponse create(CreateEventRequest request){
        try{
            User user = userRepository.findById(request.getCreatedBy()).orElseThrow(()-> new NotFoundException("User not found"));
            Event event = new Event();
@@ -63,14 +64,15 @@ public class EventService {
            event = eventRepository.save(event);
 
            userService.joinEvent(new JoinEventRequest(user.getUserId(), event.getEventId()));
-           return event;
+           return event.toResponse();
        }
        catch (Exception e){
            throw new SystemException(e.getMessage());
        }
     }
-    public List<User> getAllJoinedUser(UUID eventId){
+    public List<UserResponse> getAllJoinedUser(UUID eventId){
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
-        return event.getJoinedUserList().stream().map(EventUser::getUser).collect(Collectors.toList());
+        List<User> userList = event.getJoinedUserList().stream().map(EventUser::getUser).collect(Collectors.toList());
+        return userList.stream().map(User::toResponse).collect(Collectors.toList());
     }
 }

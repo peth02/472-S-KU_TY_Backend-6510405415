@@ -10,10 +10,9 @@ import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventUserRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
-import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserDescriptionRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserNameRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.*;
+import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
+import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,49 +30,49 @@ public class UserService {
     @Autowired
     EventUserRepository eventUserRepository;
 
-    public List<User> getAllUser(){
-        return userRepository.findAll();
+    public List<UserResponse> getAllUser(){
+        return userRepository.findAll().stream().map(User::toResponse).collect(Collectors.toList());
     }
-    public User getUserById(UUID userId){
+    public UserResponse getUserById(UUID userId){
         if(userId == null){
             throw new SystemException("userId must not be null");
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-        return user;
+        return user.toResponse();
     }
-    public User getUserByUsername(String username){
+    public UserResponse getUserByUsername(String username){
         if(username == null) throw new SystemException("username must not be null");
         User user = userRepository.findByUsername(username);
         if(user == null) throw new NotFoundException("User not found");
-        return user;
+        return user.toResponse();
     }
-    public User updateDescription(UpdateUserDescriptionRequest request){
+    public UserResponse updateDescription(UpdateUserDescriptionRequest request){
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");
         }
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
         user.setDescription(request.getDescription());
         user.setUpdatedAt(LocalDateTime.now());
-        return userRepository.save(user);
+        return userRepository.save(user).toResponse();
     }
-    public User updateEmail(UpdateUserEmailRequest request){
+    public UserResponse updateEmail(UpdateUserEmailRequest request){
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");
         }
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
         user.setEmail(request.getEmail());
-        return userRepository.save(user);
+        return userRepository.save(user).toResponse();
     }
-    public User updateName(UpdateUserNameRequest request){
+    public UserResponse updateName(UpdateUserNameRequest request){
         if(request.getUserId() == null){
             throw new SystemException("userId must not be null");
         }
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        return userRepository.save(user);
+        return userRepository.save(user).toResponse();
     }
-    public Event joinEvent(JoinEventRequest request){
+    public EventResponse joinEvent(JoinEventRequest request){
         UUID eventId = request.getEventId();
         UUID userId = request.getUserId();
 
@@ -93,15 +92,21 @@ public class UserService {
 
         eventUserRepository.save(eventUser);
 
-        return event;
+        return event.toResponse();
     }
-    public List<Event> getAllJoinedEvent(UUID userId){
+    public List<EventResponse> getAllJoinedEvent(UUID userId){
         User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not found"));
-        return user.getJoinedEventList().stream().map(EventUser::getEvent).collect(Collectors.toList());
+        return user.getJoinedEventList().stream().map(EventUser::getEvent).map(Event::toResponse).collect(Collectors.toList());
     }
-    public User updateUser(User user){
-        if(user == null) throw new SystemException("userId must not be null");
-        userRepository.findById(user.getUserId()).orElseThrow(()-> new NotFoundException("User not found"));
-        return userRepository.save(user);
+    public UserResponse updateUser(UpdateUserRequest request){
+        if(request == null) throw  new SystemException("Request must not be null");
+        UUID userId = request.getUserId();
+        if(userId == null) throw new SystemException("User id must not be null");
+        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setDescription(request.getDescription());
+        return userRepository.save(user).toResponse();
     }
 }

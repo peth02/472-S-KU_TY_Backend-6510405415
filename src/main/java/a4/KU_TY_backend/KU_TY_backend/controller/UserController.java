@@ -1,10 +1,7 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
 
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
-import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserDescriptionRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserEmailRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.UpdateUserNameRequest;
+import a4.KU_TY_backend.KU_TY_backend.request.*;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +45,8 @@ public class UserController {
         return ResponseHandler.responseBuilder("Update user name success", HttpStatus.OK, service.updateName(request));
     }
     @PutMapping("/user")
-    public ResponseEntity<Object> updateUser(@RequestBody User user){
-        return ResponseHandler.responseBuilder("Update user success", HttpStatus.OK, service.updateUser(user));
+    public ResponseEntity<Object> updateUser(@RequestBody UpdateUserRequest request){
+        return ResponseHandler.responseBuilder("Update user success", HttpStatus.OK, service.updateUser(request));
     }
     @PostMapping("/user/join/event")
     public ResponseEntity<Object> joinEvent(@RequestBody JoinEventRequest request){

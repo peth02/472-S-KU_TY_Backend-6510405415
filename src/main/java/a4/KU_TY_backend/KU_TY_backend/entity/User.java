@@ -1,5 +1,6 @@
 package a4.KU_TY_backend.KU_TY_backend.entity;
 
+import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -38,4 +39,16 @@ public class User {
     @JsonIgnore
     private List<EventUser> joinedEventList;
 
+    public UserResponse toResponse(){
+        UserResponse response = new UserResponse();
+        response.setDescription(description);
+        response.setEmail(email);
+        response.setUsername(username);
+        response.setLastName(lastName);
+        response.setFirstName(firstName);
+        response.setUserId(userId);
+        response.setMajorName(majorName);
+        response.setDepartmentNameTh(departmentNameTh);
+        return response;
+    }
 }

@@ -5,6 +5,7 @@ import a4.KU_TY_backend.KU_TY_backend.exception.LoginException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.LoginRequest;
+import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 import a4.KU_TY_backend.KU_TY_backend.util.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 public class LoginService {
     @Autowired
     private UserRepository repository;
-    public User login(LoginRequest loginRequest){
+    public UserResponse login(LoginRequest loginRequest){
         try {
             // ใช้ username ที่ยังไม่ encrypt เพื่อค้นหาและเพิ่ม User
             String username = loginRequest.getUsername();
@@ -116,9 +117,9 @@ public class LoginService {
                     user.setLastName(lastNameEn);
                     user.setDepartmentNameTh(departmentName);
                     user.setMajorName(majorName);
-                    return repository.save(user);
+                    return repository.save(user).toResponse();
                 }
-                return user;
+                return user.toResponse();
             }
             throw new LoginException("Invalid Username and Password");
 

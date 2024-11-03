@@ -43,21 +43,21 @@ public class Event {
     private String imageUrl;
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private EventType typeId;
+    private EventType eventType;
     public EventResponse toResponse() {
         EventResponse dto = new EventResponse();
         dto.setEventId(eventId);
-        dto.setCreatedBy(createdBy.getUserId());
+        dto.setCreatedBy(createdBy);
         dto.setName(name);
         dto.setDescription(description);
-        dto.setCreatedAt(createdAt);
-        dto.setUpdatedAt(updatedAt);
         dto.setStatus(status);
-        dto.setStartDate(startDate);
+        dto.setStartDate(startDate == null ? null : startDate.toLocalDate());
+        dto.setStartTime(startDate == null ? null : startDate.toLocalTime());
         dto.setLocation(location);
         dto.setCapacity(capacity);
         dto.setAttendeeCount(attendeeCount);
         dto.setImageUrl(imageUrl);
+        dto.setTypeName(eventType == null ? null : eventType.getTypeName());
         return dto;
     }
 }

@@ -20,7 +20,7 @@ public class EventType{
     private UUID typeId;
     @Column(nullable = false, name = "type_name", unique = true)
     private String typeName;
-    @OneToMany(mappedBy = "typeId")
+    @OneToMany(mappedBy = "eventType")
     @JsonIgnore
     private List<Event> eventList;
 }

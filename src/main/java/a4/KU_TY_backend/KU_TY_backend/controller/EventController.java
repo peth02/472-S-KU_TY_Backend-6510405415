@@ -28,8 +28,7 @@ public class EventController {
     }
     @PostMapping("/event")
     public ResponseEntity<Object> create(@RequestBody CreateEventRequest request){
-        Event event = service.create(request);
-        return ResponseHandler.responseBuilder("Create event success", HttpStatus.OK, event);
+        return ResponseHandler.responseBuilder("Create event success", HttpStatus.OK, service.create(request));
     }
 
 }

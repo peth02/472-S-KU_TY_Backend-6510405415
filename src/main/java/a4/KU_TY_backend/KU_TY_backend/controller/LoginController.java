@@ -17,7 +17,6 @@ public class LoginController {
     private LoginService service;
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest){
-        User user = service.login(loginRequest);
-        return ResponseHandler.responseBuilder("login successful", HttpStatus.OK, user);
+        return ResponseHandler.responseBuilder("login successful", HttpStatus.OK, service.login(loginRequest));
     }
 }
