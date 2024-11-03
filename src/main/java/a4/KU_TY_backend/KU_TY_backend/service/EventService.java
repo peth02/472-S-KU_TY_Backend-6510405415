@@ -1,5 +1,6 @@
 package a4.KU_TY_backend.KU_TY_backend.service;
 
+import a4.KU_TY_backend.KU_TY_backend.common.EventStatus;
 import a4.KU_TY_backend.KU_TY_backend.entity.Event;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventType;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
@@ -37,7 +38,7 @@ public class EventService {
     @Autowired
     private EventTypeRepository eventTypeRepository;
     public List<EventResponse> getAllEvent(){
-        List<Event> eventList = eventRepository.findAll();
+        List<Event> eventList = eventRepository.getByStatus(EventStatus.OPEN);
         return eventList.stream().map(Event::toResponse).collect(Collectors.toList());
     }
     public EventResponse getEventById(UUID eventId){
