@@ -36,10 +36,8 @@ public class UserService {
         return userRepository.findAll().stream().map(User::toResponse).collect(Collectors.toList());
     }
     public UserResponse getUserById(UUID userId){
-        if(userId == null){
-            throw new SystemException("userId must not be null");
-        }
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        validator.userIdValidate(userId);
+        User user = userRepository.findById(userId).get();
         return user.toResponse();
     }
     public UserResponse getUserByUsername(String username){
@@ -49,27 +47,21 @@ public class UserService {
         return user.toResponse();
     }
     public UserResponse updateDescription(UpdateUserDescriptionRequest request){
-        if(request.getUserId() == null){
-            throw new SystemException("userId must not be null");
-        }
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+        validator.userIdValidate(request.getUserId());
+        User user = userRepository.findById(request.getUserId()).get();
         user.setDescription(request.getDescription());
         user.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(user).toResponse();
     }
     public UserResponse updateEmail(UpdateUserEmailRequest request){
-        if(request.getUserId() == null){
-            throw new SystemException("userId must not be null");
-        }
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+        validator.userIdValidate(request.getUserId());
+        User user = userRepository.findById(request.getUserId()).get();
         user.setEmail(request.getEmail());
         return userRepository.save(user).toResponse();
     }
     public UserResponse updateName(UpdateUserNameRequest request){
-        if(request.getUserId() == null){
-            throw new SystemException("userId must not be null");
-        }
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+        validator.userIdValidate(request.getUserId());
+        User user = userRepository.findById(request.getUserId()).get();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         return userRepository.save(user).toResponse();
@@ -97,13 +89,14 @@ public class UserService {
         return event.toResponse();
     }
     public List<EventResponse> getAllJoinedEvent(UUID userId){
-        User user = userRepository.findById(userId).orElseThrow(()->new NotFoundException("User not found"));
+        validator.userIdValidate(userId);
+        User user = userRepository.findById(userId).get();
         return user.getJoinedEventList().stream().map(EventUser::getEvent).map(Event::toResponse).collect(Collectors.toList());
     }
     public UserResponse updateUser(UpdateUserRequest request){
         UUID userId = request.getUserId();
-        if(userId == null) throw new SystemException("User id must not be null");
-        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User not found"));
+        validator.userIdValidate(userId);
+        User user = userRepository.findById(userId).get();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
@@ -111,9 +104,8 @@ public class UserService {
         return userRepository.save(user).toResponse();
     }
     public List<EventResponse> getAllCreatedEvent(UUID userId){
-        if(userId == null) throw new SystemException("user Id must not be null");
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-        if(user == null) throw new NotFoundException("User not found");
+        validator.userIdValidate(userId);
+        User user = userRepository.findById(userId).get();
         return user.getCreatedEventList().stream().map(Event::toResponse).collect(Collectors.toList());
     }
     public void quitEvent(QuitEventRequest request){

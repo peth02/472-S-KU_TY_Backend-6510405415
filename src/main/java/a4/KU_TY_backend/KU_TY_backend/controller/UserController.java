@@ -23,7 +23,7 @@ public class UserController {
         return ResponseHandler.responseBuilder("Get user success", HttpStatus.OK, service.getUserById(userId));
     }
     @GetMapping("/user/username/{username}")
-    public ResponseEntity<Object> getUserById(@PathVariable("username") String username){
+    public ResponseEntity<Object> getUserByUsername(@PathVariable("username") String username){
         return ResponseHandler.responseBuilder("Get user success", HttpStatus.OK, service.getUserByUsername(username));
     }
     @GetMapping("/user/userId/{userId}/joined/event")
@@ -57,6 +57,8 @@ public class UserController {
     }
     @PostMapping("/user/join/event")
     public ResponseEntity<Object> joinEvent(@RequestBody JoinEventRequest request){
-        return ResponseHandler.responseBuilder("Join event success", HttpStatus.OK, service.joinEvent(request));
+        ResponseEntity<Object> response= ResponseHandler.responseBuilder("Join event success", HttpStatus.OK, service.joinEvent(request));
+        service.joinEvent(new JoinEventRequest(request.getUserId(), request.getEventId()));
+        return  response;
     }
 }

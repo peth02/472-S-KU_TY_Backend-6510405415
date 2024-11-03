@@ -14,5 +14,4 @@ public class CreateEventRequest {
     private LocalTime startTime;
     private String location;
     private int capacity;
-    private String imageUrl;
 }

@@ -19,7 +19,6 @@ public class EditEventRequest {
     private LocalTime startTime;
     private String location;
     private int capacity;
-    private String imageUrl;
     private String typeName;
     @Enumerated(EnumType.STRING)
     private EventStatus status;
