@@ -38,6 +38,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<EventUser> joinedEventList;
+    private String imageUrl;
 
     public UserResponse toResponse(){
         UserResponse response = new UserResponse();
@@ -49,6 +50,7 @@ public class User {
         response.setUserId(userId);
         response.setMajorName(majorName);
         response.setDepartmentNameTh(departmentNameTh);
+        response.setImageUrl(imageUrl);
         return response;
     }
 }

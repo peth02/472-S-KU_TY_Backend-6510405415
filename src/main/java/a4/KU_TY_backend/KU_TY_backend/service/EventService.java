@@ -5,22 +5,18 @@ import a4.KU_TY_backend.KU_TY_backend.entity.Event;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventType;
 import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
 import a4.KU_TY_backend.KU_TY_backend.entity.User;
-import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventTypeRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.EditEventImageRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.JoinEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
 import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 
 import a4.KU_TY_backend.KU_TY_backend.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

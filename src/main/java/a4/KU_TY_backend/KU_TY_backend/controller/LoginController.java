@@ -1,6 +1,4 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
-
-import a4.KU_TY_backend.KU_TY_backend.entity.User;
 import a4.KU_TY_backend.KU_TY_backend.request.LoginRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.LoginService;

@@ -1,6 +1,4 @@
 package a4.KU_TY_backend.KU_TY_backend.response;
-
-import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

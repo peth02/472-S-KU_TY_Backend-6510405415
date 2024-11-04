@@ -119,5 +119,11 @@ public class UserService {
         event.setAttendeeCount(event.getAttendeeCount() - 1);
         eventRepository.save(event);
     }
+    public UserResponse updateImage(UUID userId, String imageUrl){;
+        validator.userIdValidate(userId);
+        User user = userRepository.findById(userId).get();
+        user.setImageUrl(imageUrl);
+        return userRepository.save(user).toResponse();
+    }
 
 }

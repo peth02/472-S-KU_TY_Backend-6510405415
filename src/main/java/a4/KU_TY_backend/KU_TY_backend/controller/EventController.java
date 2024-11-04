@@ -1,7 +1,6 @@
 package a4.KU_TY_backend.KU_TY_backend.controller;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.request.CreateEventRequest;
-import a4.KU_TY_backend.KU_TY_backend.request.EditEventImageRequest;
 import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.CloudinaryService;
