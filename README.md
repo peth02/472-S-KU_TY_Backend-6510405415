@@ -11,7 +11,7 @@ Developer : ณัฐพงษ์ เลปนะสุวรรณ 6510405491
 
 ก่อนที่จะเริ่มติดตั้งโปรเจกต์นี้ คุณต้องติดตั้งสิ่งต่อไปนี้:  
 
-- Java Development Kit (JDK) version 17 
+- ดาวน์โหลด Java Development Kit (JDK) version 17 
 
 # การติดตั้งและการรัน
 
