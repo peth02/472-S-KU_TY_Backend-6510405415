@@ -59,7 +59,7 @@ public class EventService {
            String location = request.getLocation();
            LocalDate startDate = request.getStartDate();
            LocalTime startTime = request.getStartTime();
-
+           String typeName = request.getTypeName();
            int capacity = request.getCapacity();
 
 
@@ -68,11 +68,12 @@ public class EventService {
            event.setDescription(description);
            event.setLocation(location);
            if(startDate == null && startTime == null) event.setStartDate(null);
-           else if(startDate == null || startTime == null) throw new SystemException("If want start date and time ะน null set both null");
+           else if(startDate == null || startTime == null) throw new SystemException("If want start date and time to null.Please set both null");
            else event.setStartDate(LocalDateTime.of(startDate, startTime));
            event.setCapacity(capacity);
            event.setCreatedAt(LocalDateTime.now());
            event.setUpdatedAt(event.getCreatedAt());
+           event.setEventType(getEventType(typeName));
            event = eventRepository.save(event);
            return event.toResponse();
        }
@@ -86,18 +87,30 @@ public class EventService {
         List<User> userList = event.getJoinedUserList().stream().map(EventUser::getUser).toList();
         return userList.stream().map(User::toResponse).collect(Collectors.toList());
     }
+    private EventType getEventType(String typeName){
+        if(typeName == null) return null;
+        else{
+            EventType eventType = eventTypeRepository.findByTypeName(typeName);
+            if(eventType == null) {
+                eventType = new EventType();
+                eventType.setTypeName(typeName);
+                eventType = eventTypeRepository.save(eventType);
+            }
+            return eventType;
+        }
+    }
     public EventResponse updateEvent(EditEventRequest request){
         UUID eventId = request.getEventId();
         validator.eventIdValidate(eventId);
         Event event = eventRepository.findById(eventId).get();
         if(request.getCapacity() < event.getAttendeeCount()) throw new SystemException("Capacity must greater or equal attendee count");
-        EventType eventType = eventTypeRepository.findByTypeName(request.getTypeName());
-        if(eventType == null) throw new NotFoundException("Type not found");
+        String typeName = request.getTypeName();
+
+        event.setEventType(getEventType(typeName));
         event.setCapacity(request.getCapacity());
         event.setName(request.getName());
         event.setDescription(request.getDescription());
         event.setLocation(request.getLocation());
-        event.setEventType(eventType);
         if(request.getStartDate() == null && request.getStartTime() == null) event.setStartDate(null);
         else if(request.getStartDate() == null || request.getStartTime() == null) throw new SystemException("If want start date and time ะน null set both null");
         else event.setStartDate(LocalDateTime.of(request.getStartDate(), request.getStartTime()));

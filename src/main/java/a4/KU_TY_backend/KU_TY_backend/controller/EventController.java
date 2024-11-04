@@ -6,7 +6,6 @@ import a4.KU_TY_backend.KU_TY_backend.request.EditEventRequest;
 import a4.KU_TY_backend.KU_TY_backend.response.ResponseHandler;
 import a4.KU_TY_backend.KU_TY_backend.service.CloudinaryService;
 import a4.KU_TY_backend.KU_TY_backend.service.EventService;
-import jakarta.servlet.annotation.MultipartConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
