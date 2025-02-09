@@ -69,6 +69,11 @@ public class UserController {
         userService.quitEvent(request);
         return ResponseHandler.responseBuilder("Quit event success", HttpStatus.OK,null);
     }
+    @DeleteMapping("/user/kick")
+    public ResponseEntity<Object> kickFromEvent(@RequestBody KickFromEventRequest request){
+        userService.kickFromEvent(request);
+        return ResponseHandler.responseBuilder("Kick from event success", HttpStatus.OK,null);
+    }
     @PostMapping("/user/join/event")
     public ResponseEntity<Object> joinEvent(@RequestBody JoinEventRequest request){
         ResponseEntity<Object> response= ResponseHandler.responseBuilder("Join event success", HttpStatus.OK, userService.joinEvent(request));
@@ -77,3 +82,4 @@ public class UserController {
     }
 
 }
+

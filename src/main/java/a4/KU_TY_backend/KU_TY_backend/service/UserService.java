@@ -119,6 +119,21 @@ public class UserService {
         event.setAttendeeCount(event.getAttendeeCount() - 1);
         eventRepository.save(event);
     }
+    public void kickFromEvent(KickFromEventRequest request){
+        UUID ownerId = request.getOwnerId();
+        UUID eventId = request.getEventId();
+        UUID participantId = request.getParticipantId();
+        validator.userIdValidate(ownerId);
+        validator.userIdValidate(participantId);
+        validator.eventIdValidate(eventId);
+        Event event = eventRepository.findById(eventId).get();
+        User owner = userRepository.findById(ownerId).get();
+        if(!event.getCreatedBy().equals(owner)) throw new NotFoundException("You are not owner");
+        EventUser eventUser = eventUserRepository.findById(new EventUserKey(eventId, participantId)).orElseThrow(()-> new NotFoundException("User not in event"));
+        eventUserRepository.delete(eventUser);
+        event.setAttendeeCount(event.getAttendeeCount() - 1);
+        eventRepository.save(event);
+    }
     public UserResponse updateImage(UUID userId, String imageUrl){;
         validator.userIdValidate(userId);
         User user = userRepository.findById(userId).get();
