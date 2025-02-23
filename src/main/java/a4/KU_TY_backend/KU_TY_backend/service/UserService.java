@@ -1,14 +1,12 @@
 package a4.KU_TY_backend.KU_TY_backend.service;
 
-import a4.KU_TY_backend.KU_TY_backend.entity.Event;
-import a4.KU_TY_backend.KU_TY_backend.entity.EventUser;
-import a4.KU_TY_backend.KU_TY_backend.entity.EventUserKey;
-import a4.KU_TY_backend.KU_TY_backend.entity.User;
+import a4.KU_TY_backend.KU_TY_backend.entity.*;
 import a4.KU_TY_backend.KU_TY_backend.exception.ConflictException;
 import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventUserRepository;
+import a4.KU_TY_backend.KU_TY_backend.repository.FeedbackRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.*;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
@@ -32,6 +30,8 @@ public class UserService {
     private EventUserRepository eventUserRepository;
     @Autowired
     private Validator validator;
+    @Autowired
+    private FeedbackRepository feedbackRepository;
     public List<UserResponse> getAllUser(){
         return userRepository.findAll().stream().map(User::toResponse).collect(Collectors.toList());
     }
@@ -134,11 +134,30 @@ public class UserService {
         event.setAttendeeCount(event.getAttendeeCount() - 1);
         eventRepository.save(event);
     }
-    public UserResponse updateImage(UUID userId, String imageUrl){;
+    public UserResponse updateImage(UUID userId, String imageUrl){
         validator.userIdValidate(userId);
         User user = userRepository.findById(userId).get();
         user.setImageUrl(imageUrl);
         return userRepository.save(user).toResponse();
+    }
+    public void giveFeedback(GiveFeedbackRequest request){
+        UUID userId = request.getUserId();
+        UUID eventId = request.getEventId();
+        String feedback = request.getFeedback();
+        validator.userIdValidate(userId);
+        validator.eventIdValidate(eventId);
+        User user = userRepository.findById(userId).get();
+        Event event = eventRepository.findById(eventId).get();
+        FeedbackKey feedbackKey = new FeedbackKey(userId, eventId);
+
+        Feedback feedbackObject = new Feedback();
+        feedbackObject.setKey(feedbackKey);
+        feedbackObject.setUser(user);
+        feedbackObject.setEvent(event);
+        feedbackObject.setFeedback(feedback);
+
+        feedbackRepository.save(feedbackObject);
+
     }
 
 }
