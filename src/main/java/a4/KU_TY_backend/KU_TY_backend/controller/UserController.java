@@ -80,12 +80,6 @@ public class UserController {
         userService.joinEvent(new JoinEventRequest(request.getUserId(), request.getEventId()));
         return  response;
     }
-    @PostMapping("/user/feedback")
-    public ResponseEntity<Object> giveFeedback(@RequestBody GiveFeedbackRequest request){
-        userService.giveFeedback(request);
-        ResponseEntity<Object> response = ResponseHandler.responseBuilder("Give feedback to event success", HttpStatus.OK, null);
-        return response;
-    }
 
 }
 

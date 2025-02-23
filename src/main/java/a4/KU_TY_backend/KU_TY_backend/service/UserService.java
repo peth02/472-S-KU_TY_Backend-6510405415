@@ -6,7 +6,6 @@ import a4.KU_TY_backend.KU_TY_backend.exception.NotFoundException;
 import a4.KU_TY_backend.KU_TY_backend.exception.SystemException;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.EventUserRepository;
-import a4.KU_TY_backend.KU_TY_backend.repository.FeedbackRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.*;
 import a4.KU_TY_backend.KU_TY_backend.response.EventResponse;
@@ -30,8 +29,6 @@ public class UserService {
     private EventUserRepository eventUserRepository;
     @Autowired
     private Validator validator;
-    @Autowired
-    private FeedbackRepository feedbackRepository;
     public List<UserResponse> getAllUser(){
         return userRepository.findAll().stream().map(User::toResponse).collect(Collectors.toList());
     }
@@ -140,24 +137,6 @@ public class UserService {
         user.setImageUrl(imageUrl);
         return userRepository.save(user).toResponse();
     }
-    public void giveFeedback(GiveFeedbackRequest request){
-        UUID userId = request.getUserId();
-        UUID eventId = request.getEventId();
-        String feedback = request.getFeedback();
-        validator.userIdValidate(userId);
-        validator.eventIdValidate(eventId);
-        User user = userRepository.findById(userId).get();
-        Event event = eventRepository.findById(eventId).get();
-        FeedbackKey feedbackKey = new FeedbackKey(userId, eventId);
 
-        Feedback feedbackObject = new Feedback();
-        feedbackObject.setKey(feedbackKey);
-        feedbackObject.setUser(user);
-        feedbackObject.setEvent(event);
-        feedbackObject.setFeedback(feedback);
-
-        feedbackRepository.save(feedbackObject);
-
-    }
 
 }
