@@ -30,13 +30,11 @@ public class FeedbackService {
         UUID userId = request.getUserId();
         UUID eventId = request.getEventId();
         String feedback = request.getFeedback();
-        validator.userIdValidate(userId);
         validator.eventIdValidate(eventId);
-        User user = userRepository.findById(userId).get();
         Event event = eventRepository.findById(eventId).get();
 
         Feedback feedbackObject = new Feedback();
-        feedbackObject.setUser(user);
+        feedbackObject.setUser(userId == null ? null: userRepository.findById(userId).get());
         feedbackObject.setEvent(event);
         feedbackObject.setFeedback(feedback);
 

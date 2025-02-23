@@ -6,11 +6,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class GiveFeedbackRequest {
-    private UUID userId;
     private UUID eventId;
     private String feedback;
+    private UUID userId;
+    @JsonSetter("userId")
+    public void setUserId(String userId) {
+        this.userId = (userId == null || "null".equals(userId)) ? null : UUID.fromString(userId);
+    }
 }

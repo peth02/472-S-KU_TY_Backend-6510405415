@@ -18,7 +18,7 @@ public class Feedback {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
     @Column(nullable = false)
     private String feedback;
@@ -27,7 +27,7 @@ public class Feedback {
         FeedbackResponse dto = new FeedbackResponse();
         dto.setFeedback(feedback);
         dto.setEventId(event.getEventId());
-        dto.setUserId(user.getUserId());
+        dto.setUserId(user == null ? null : user.getUserId());
         return dto;
     }
 
