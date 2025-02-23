@@ -1,6 +1,7 @@
 package a4.KU_TY_backend.KU_TY_backend.entity;
 
 
+import a4.KU_TY_backend.KU_TY_backend.response.FeedbackResponse;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,5 +22,13 @@ public class Feedback {
     private User user;
     @Column(nullable = false)
     private String feedback;
+
+    public FeedbackResponse toResponse(){
+        FeedbackResponse dto = new FeedbackResponse();
+        dto.setFeedback(feedback);
+        dto.setEventId(event.getEventId());
+        dto.setUserId(user.getUserId());
+        return dto;
+    }
 
 }

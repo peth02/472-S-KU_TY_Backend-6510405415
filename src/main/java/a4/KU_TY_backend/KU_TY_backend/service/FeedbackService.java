@@ -7,11 +7,14 @@ import a4.KU_TY_backend.KU_TY_backend.repository.EventRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.FeedbackRepository;
 import a4.KU_TY_backend.KU_TY_backend.repository.UserRepository;
 import a4.KU_TY_backend.KU_TY_backend.request.GiveFeedbackRequest;
+import a4.KU_TY_backend.KU_TY_backend.response.FeedbackResponse;
 import a4.KU_TY_backend.KU_TY_backend.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
@@ -39,5 +42,10 @@ public class FeedbackService {
 
         feedbackRepository.save(feedbackObject);
 
+    }
+    public List<FeedbackResponse> getFeedbackFromEvent(UUID eventId){
+        validator.eventIdValidate(eventId);
+        Event event = eventRepository.findById(eventId).get();
+        return event.getFeedbackList().stream().map(Feedback::toResponse).collect(Collectors.toList());
     }
 }
