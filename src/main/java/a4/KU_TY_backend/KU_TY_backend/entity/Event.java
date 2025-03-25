@@ -30,7 +30,7 @@ public class Event {
     @Column(name = "start_date")
     private LocalDateTime startDate;
     private String location;
-    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<EventUser> joinedUserList;
     @Min(1)
