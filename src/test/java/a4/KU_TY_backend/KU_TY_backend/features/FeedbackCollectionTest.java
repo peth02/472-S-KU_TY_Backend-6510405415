@@ -16,6 +16,7 @@ import a4.KU_TY_backend.KU_TY_backend.response.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -42,6 +43,14 @@ public class FeedbackCollectionTest {
     private EventRepository eventRepository;
     @Autowired
     private FeedbackController feedbackController;
+    @Value("${owner.id}")
+    private String ownerUsername;
+    @Value("${owner.password}")
+    private String ownerPassword;
+    @Value("${participant.id}")
+    private String participantUsername;
+    @Value("${participant.password}")
+    private String participantPassword;
     private ResponseEntity<Object> response;
     private UUID ownerId;
     private UUID eventId;
@@ -49,7 +58,7 @@ public class FeedbackCollectionTest {
 
     @BeforeEach
     void setUp(){
-        LoginRequest loginRequest = new LoginRequest("b6510405491", "25698720@Jj");
+        LoginRequest loginRequest = new LoginRequest(ownerUsername, ownerPassword);
         response = loginController.login(loginRequest);
         ownerId = ((UserResponse) ((Map<String, Object>) response.getBody()).get("data")).getUserId();
 
